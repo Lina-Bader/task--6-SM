@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text to Speech Converter</title>
+</head>
+<body>
+    <h1>Text to Speech Converter</h1>
+    <form method="POST" action="/convert">
+        <textarea name="text" placeholder="Enter text here..."></textarea>
+        <br>
+        <button type="submit">Convert to Speech</button>
+    </form>
+    <audio id="audio" controls style="display: none;"></audio>
+</body>
+<script>
+    fetch('/audio')
+        .then(response => {
+            if (response.ok) {
+                return response.blob();
+            } else {
+                throw new Error('No audio available');
+            }
+        })
+        .then(blob => {
+            const audio = document.getElementById('audio');
+            const url = URL.createObjectURL(blob);
+            audio.src = url;
+            audio.style.display = 'block';
+        })
+        .catch(error => console.error('Error fetching audio:', error));
+</script>
+</html>
